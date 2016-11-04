@@ -38,3 +38,41 @@
 		
 
 	});
+
+	//post data and create a new record
+
+	$app->put('/api/books/{id}',function($request){
+		
+		/*$my_name = $request->getParsedBody()['my_name'];//PSR-7 way to get post data
+		echo "hello ".$my_name;*/
+		require_once("dbconnect.php");
+		$id = $request->getAttribute('id');
+		//$query = "INSERT INTO `books`(`book_title`, `author`, `amazon_url`) VALUES (?,?,?)";
+$query = "UPDATE `books` SET `book_title` = ?, `author` = ?, `amazon_url` = ? WHERE `books`.`id` = $id;";
+		$stmt = $mysqli->prepare($query);
+		$stmt->bind_param("sss",$a,$b,$c);
+
+		
+
+			$a = $request->getParsedBody()['book_title'];
+			$b = $request->getParsedBody()['author'];
+			$c = $request->getParsedBody()['amazon_url'];
+
+			$stmt->execute();				
+	});
+
+//delete a record from the database
+	$app->delete('/api/books/{id}',function($request){
+		
+		/*$my_name = $request->getParsedBody()['my_name'];//PSR-7 way to get post data
+		echo "hello ".$my_name;*/
+		require_once("dbconnect.php");
+		$id = $request->getAttribute('id');
+		//$query = "INSERT INTO `books`(`book_title`, `author`, `amazon_url`) VALUES (?,?,?)";
+		$query = "delete from books WHERE id = $id";
+		$stmt = $mysqli->prepare($query);
+		$stmt->execute();	
+
+	});
+
+		
